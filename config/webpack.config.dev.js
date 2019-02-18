@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const PATHS = require("./paths");
 const path = require("path");
 const express = require("express");
+const autoprefixer = require("autoprefixer");
 
 const HtmlWebpackPluginConfig = new HtmlWebpackPlugin({
   template: path.join(PATHS.static, "/index.html"),
@@ -95,7 +96,7 @@ module.exports = {
             }
           }
         ]
-      },
+      }
     ]
   },
   resolve: {

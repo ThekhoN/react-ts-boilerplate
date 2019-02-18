@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const CompressionWebpackPlugin = require("compression-webpack-plugin");
 const ImageminPlugin = require("imagemin-webpack-plugin").default;
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const autoprefixer = require("autoprefixer");
 const PATHS = require("./paths");
 const path = require("path");
 
@@ -55,6 +56,55 @@ module.exports = {
             loader: MiniCssExtractPlugin.loader
           },
           "css-loader"
+        ]
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          require.resolve("style-loader"),
+          {
+            loader: MiniCssExtractPlugin.loader
+          },
+          {
+            loader: require.resolve("css-loader"),
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: require.resolve("postcss-loader"),
+            options: {
+              ident: "postcss",
+              sourceMap: true,
+              plugins: () => [
+                require("postcss-flexbugs-fixes"),
+                autoprefixer({
+                  browsers: [
+                    ">1%",
+                    "last 4 versions",
+                    "Firefox ESR",
+                    "not ie < 9" // IE9 & IE9+
+                  ],
+                  flexbox: "no-2009"
+                })
+              ]
+            }
+          },
+          {
+            loader: "sass-loader",
+            options: {
+              sourceMap: true
+            }
+          },
+          {
+            loader: "sass-resources-loader",
+            options: {
+              // make global scss varibles available to all .scss without manually importing
+              resources: [
+                path.join(PATHS.src, "/styles-global/global-variables.scss")
+              ]
+            }
+          }
         ]
       },
       {
